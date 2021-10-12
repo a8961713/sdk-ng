@@ -1,0 +1,12 @@
+diff -x .git -Naurw crosstool-ng/config/comp_libs/newlib-nano.in crosstool-ng.new/config/comp_libs/newlib-nano.in
+--- crosstool-ng/config/comp_libs/newlib-nano.in	2021-06-29 07:20:31.373756772 +0300
++++ crosstool-ng.new/config/comp_libs/newlib-nano.in	2021-06-29 07:19:56.705808907 +0300
+@@ -21,7 +21,7 @@
+ config NEWLIB_NANO_GCC_LIBSTDCXX_TARGET_CXXFLAGS
+     string
+     prompt "Target CXXFLAGS for libstdc++ newlib-nano variant"
+-    default "-fno-exceptions"
++    default "-fexceptions"
+     help
+       Used to add extra CXXFLAGS when compiling the target libstdc++
+       newlib-nano library (e.g. -fno-exceptions).

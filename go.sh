@@ -9,7 +9,7 @@ fi
 
 GITDIR=${PWD}
 TARBALL_DIR=${GITDIR}
-JOBS=$(python -c 'import multiprocessing as mp; print(mp.cpu_count())')
+JOBS=$(python3 -c 'import multiprocessing as mp; print(mp.cpu_count())')
 
 unameOut="$(uname -s)"
 machine="$(uname -m)"
@@ -58,6 +58,8 @@ build_crosstool()
 			git clone https://github.com/zephyrproject-rtos/crosstool-ng.git
 			pushd crosstool-ng
 			git checkout ${CROSSTOOL_COMMIT}
+			echo "Patching tree"
+			patch -p 1 < ../nano_exceptions.patch
 			popd
 			popd
 		fi

@@ -2,3 +2,6 @@
 bin/*
 share/*
 build/*
+crosstool-ng/
+libexec/
+arm.linux.x86_64.tar.bz2
