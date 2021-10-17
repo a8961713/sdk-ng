@@ -28,7 +28,10 @@ if [ "$os" == "macos" ]; then
 	SDK_NG_HOME="/Volumes/${ImageName}"
 fi
 
-CROSSTOOL_COMMIT="e0117582601a9a60fe279fda920da3875a0db366"
+#CROSSTOOL_COMMIT="e0117582601a9a60fe279fda920da3875a0db366"
+# replacing with our own working repo:
+CROSSTOOL_COMMIT="51452220fb028882607c9bf63834a511cc00d885"
+
 build_crosstool()
 {
 	# only build if we don't already have a built binary
@@ -55,7 +58,9 @@ build_crosstool()
 		# Checkout crosstool-ng if we haven't already
 		if [ ! -d "${SDK_NG_HOME}/crosstool-ng" ]; then
 			pushd ${SDK_NG_HOME}
-			git clone https://github.com/zephyrproject-rtos/crosstool-ng.git
+			# git clone https://github.com/zephyrproject-rtos/crosstool-ng.git
+			# replacing with our own working repo:
+			git clone https://github.com/a8961713/crosstool-ng.git
 			pushd crosstool-ng
 			git checkout ${CROSSTOOL_COMMIT}
 			echo "Patching tree"
