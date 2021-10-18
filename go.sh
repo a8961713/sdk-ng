@@ -30,7 +30,8 @@ fi
 
 #CROSSTOOL_COMMIT="e0117582601a9a60fe279fda920da3875a0db366"
 # replacing with our own working repo:
-CROSSTOOL_COMMIT="51452220fb028882607c9bf63834a511cc00d885"
+CROSSTOOL_COMMIT="SDK-0.13.0"
+
 
 build_crosstool()
 {
@@ -63,8 +64,6 @@ build_crosstool()
 			git clone https://github.com/a8961713/crosstool-ng.git
 			pushd crosstool-ng
 			git checkout ${CROSSTOOL_COMMIT}
-			echo "Patching tree"
-			patch -p 1 < ../nano_exceptions.patch
 			popd
 			popd
 		fi

@@ -5,3 +5,8 @@ build/*
 crosstool-ng/
 libexec/
 arm.linux.x86_64.tar.bz2
+cmake.linux.x86_64.tar.bz2
+scripts/toolchains/
+scripts/zephyr-*-linux-x86_64-setup.run
+zephyr-sdk-x86_64-hosttools-standalone-*.sh
+poky/
