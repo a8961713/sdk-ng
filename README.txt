@@ -1,0 +1,5 @@
+We added a Makefile that does all we need to build the ARM toolchain with stdc++-nano WITH exceptions:
+
+type: make
+
+result is: ./scripts/zephyr-toolchain-arm-0.13.1-linux-x86_64-setup.run
