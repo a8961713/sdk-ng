@@ -28,10 +28,8 @@ if [ "$os" == "macos" ]; then
 	SDK_NG_HOME="/Volumes/${ImageName}"
 fi
 
-#CROSSTOOL_COMMIT="e0117582601a9a60fe279fda920da3875a0db366"
 # replacing with our own working repo:
 CROSSTOOL_COMMIT="SDK-0.13.0"
-
 
 build_crosstool()
 {

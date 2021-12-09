@@ -2,9 +2,22 @@
 
 ## Zephyr SDK 0.13.2
 
+- gcc:
+  * Added multilibs for the RISC-V RV32E targets.
+  * Disabled MIPS GP register optimisation, which is not supported by the
+    Zephyr MIPS architecture port.
+
+- newlib:
+  * Enabled C99 format specifier support for newlib full variant.
+
 - qemu:
   * Added MIPS little endian emulation
   * Update xilinx qemu to 5.1.0
+  * Added Xilinx MicroBlaze little endian emulation
+
+- openocd:
+  * Fixed missing DBG clock on STM32G0/L0.
+  * Fixed image verification for ARC.
 
 ## Zephyr SDK 0.13.1
 - gdb:
