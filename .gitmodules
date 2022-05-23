@@ -1,0 +1,15 @@
+[submodule "crosstool-ng"]
+	path = crosstool-ng
+	url = https://github.com/zephyrproject-rtos/crosstool-ng.git
+[submodule "binutils"]
+	path = binutils
+	url = https://github.com/zephyrproject-rtos/binutils-gdb.git
+[submodule "newlib"]
+	path = newlib
+	url = https://github.com/zephyrproject-rtos/newlib-cygwin.git
+[submodule "gcc"]
+	path = gcc
+	url = https://github.com/zephyrproject-rtos/gcc.git
+[submodule "gdb"]
+	path = gdb
+	url = https://github.com/zephyrproject-rtos/binutils-gdb.git

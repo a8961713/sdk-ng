@@ -1,5 +1,46 @@
 # Notes / Changes in various releases
 
+## Zephyr SDK 0.14.2
+
+- general:
+  * Fixed minimal distribution bundle toolchain download failure on M1 Macs.
+
+- gcc:
+  * Fixed incorrect newlib-nano include path specified by the `nano.specs`
+    file.
+
+- newlib:
+  * Enabled C99 format specifier support for the newlib-nano, which only had
+    format specifier support up to that of the C89 standard.
+
+- qemu:
+  * Updated ARC QEMU to 2022.04.26 relesae.
+
+- openocd:
+  * Fixed Cyclone V SoC JTAG device order.
+
+## Zephyr SDK 0.14.1
+
+- general:
+  * Introduced minimal distribution bundle that supports selective download
+    and installation of the target toolchains.
+  * Added ESP32 and ESP32-S2 Xtensa toolchains.
+
+- qemu:
+  * Updated to QEMU 6.2 release.
+  * Added I2C device emulation support for ARM targets.
+  * Separated QEMU for ARC architecture from the upstream QEMU.
+
+## Zephyr SDK 0.14.0
+
+- general:
+  * Added multi-platform toolchain support (Linux, macOS and Windows).
+  * Replaced self-extracting archive (SFX) distribution format with
+    conventional archive with a setup script that can be manually run after
+    extraction.
+  * Changed Xtensa target triplet names to include the target SoC name
+    (e.g. `xtensa-sample_controller_zephyr-elf`).
+
 ## Zephyr SDK 0.13.2
 
 - gcc:

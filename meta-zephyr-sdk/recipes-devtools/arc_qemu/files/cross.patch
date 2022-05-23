@@ -10,7 +10,7 @@ Index: qemu/configure
 ===================================================================
 --- a/configure
 +++ b/configure
-@@ -3932,7 +3932,6 @@ if test "$skip_meson" = no; then
+@@ -3934,7 +3934,6 @@ if test "$skip_meson" = no; then
    fi
    echo "strip = [$(meson_quote $strip)]" >> $cross
    echo "windres = [$(meson_quote $windres)]" >> $cross
@@ -18,7 +18,7 @@ Index: qemu/configure
      cross_arg="--cross-file config-meson.cross"
      echo "[host_machine]" >> $cross
      if test "$mingw32" = "yes" ; then
-@@ -3964,9 +3963,6 @@ if test "$skip_meson" = no; then
+@@ -3966,9 +3965,6 @@ if test "$skip_meson" = no; then
      else
          echo "endian = 'little'" >> $cross
      fi
