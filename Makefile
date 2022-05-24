@@ -1,5 +1,5 @@
 CMAKE_ARTIFACT = cmake.linux.x86_64.tar.bz2
-CROSS_TOOLCHAIN_ARTIFACT = arm.linux.x86_64.tar.bz2
+CROSS_TOOLCHAIN_ARTIFACT = arm-zephyr-eabi.linux.x86_64.tar.bz2
 HOSTTOOLS_ARTIFACT = zephyr-sdk-x86_64-hosttools*.sh
 
 .phony: all build copy_artifacts pack
@@ -7,7 +7,9 @@ HOSTTOOLS_ARTIFACT = zephyr-sdk-x86_64-hosttools*.sh
 all: pack
 
 build:
-	./go.sh arm
+	git submodule update --init --force --depth=1 --recursive
+	patch -N -p 1 < hosttools.patch
+	./go.sh arm-zephyr-eabi
 	./go.sh tools
 	./go.sh cmake
 
@@ -20,3 +22,8 @@ copy_artifacts: build
 pack: copy_artifacts
 	cd ./scripts && ./make_zephyr_sdk.sh linux x86_64
 	@echo "<<< Finished OK >>>"
+
+clean:
+	rm -fr build
+	rm -fr crosstool-ng
+	rm -fr bin

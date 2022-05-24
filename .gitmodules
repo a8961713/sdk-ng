@@ -1,6 +1,3 @@
-[submodule "crosstool-ng"]
-	path = crosstool-ng
-	url = https://github.com/zephyrproject-rtos/crosstool-ng.git
 [submodule "binutils"]
 	path = binutils
 	url = https://github.com/zephyrproject-rtos/binutils-gdb.git

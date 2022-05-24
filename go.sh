@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export GITHUB_WORKSPACE=$PWD
+
 TARGETS=${@}
 
 if [ -z "$TARGETS" ]; then
@@ -151,7 +153,7 @@ for t in ${TARGETS}; do
 		arm64)
 			TRIPLET="aarch64-zephyr-elf"
 			;;
-		arm)
+		arm-zephyr-eabi)
 			TRIPLET="arm-zephyr-eabi"
 			;;
 		*)
