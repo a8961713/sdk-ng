@@ -2,18 +2,28 @@ CMAKE_ARTIFACT = cmake.linux.x86_64.tar.bz2
 CROSS_TOOLCHAIN_ARTIFACT = arm-zephyr-eabi.linux.x86_64.tar.bz2
 HOSTTOOLS_ARTIFACT = zephyr-sdk-x86_64-hosttools*.sh
 
-.phony: all build copy_artifacts pack
+.phony: all build.done copy_artifacts pack
 
 all: pack
 
-build:
-	git submodule update --init --force --depth=1 --recursive
-	patch -N -p 1 < hosttools.patch
-	./go.sh arm-zephyr-eabi
-	./go.sh tools
-	./go.sh cmake
+build.done: toolchain.built hosttools.built cmake.built
+	touch $@
 
-copy_artifacts: build
+toolchain.built:
+	git submodule update --init --force --depth=1 --recursive
+	./go.sh arm-zephyr-eabi
+	touch $@
+
+hosttools.built: toolchain.built
+	./add_safe_directories.sh
+	./go.sh tools
+	touch $@
+
+cmake.built: hosttools.built
+	./go.sh cmake
+	touch $@
+
+copy_artifacts: build.done
 	mkdir -p ./scripts/toolchains
 	cp $(CMAKE_ARTIFACT) ./scripts/toolchains
 	cp $(CROSS_TOOLCHAIN_ARTIFACT) ./scripts/toolchains
@@ -27,3 +37,4 @@ clean:
 	rm -fr build
 	rm -fr crosstool-ng
 	rm -fr bin
+	rm -f build.done
