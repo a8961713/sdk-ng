@@ -73,7 +73,7 @@ setup_hdr()
 	echo "VERSION_DIR=$version_dir" >> $setup
 	echo "SDK_VERSION=${sdk_version}" >> $setup
 
-	cat template_dir >>$setup
+	cat $root_dir/meta-zephyr-sdk/scripts/template_dir >>$setup
 }
 
 setup_cmake()
@@ -127,8 +127,8 @@ setup_ftr_common()
 
 	echo "echo \"Success installing $label.\"" >>$setup
 
-	echo "" >>$setup
-	echo "do_zephyrrc"  >>$setup
+#	echo "" >>$setup
+#	echo "do_zephyrrc"  >>$setup
 	echo "" >>$setup
 
 	echo "echo \"$label is ready to be used.\"" >>$setup
