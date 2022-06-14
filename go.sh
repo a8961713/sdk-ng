@@ -31,7 +31,8 @@ if [ "$os" == "macos" ]; then
 fi
 
 # replacing with our own working repo:
-CROSSTOOL_COMMIT="SDK-0.13.0"
+#CROSSTOOL_COMMIT="SDK-0.13.0"
+CROSSTOOL_COMMIT="upgrade_test"
 
 build_crosstool()
 {
