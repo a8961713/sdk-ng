@@ -18,7 +18,7 @@ on:
       zephyr-ref:
         description: 'Zephyr Ref (branch, tag, SHA, ...)'
         required: true
-        default: main
+        default: topic-sdk15
       host:
         description: 'Host'
         type: choice
@@ -54,6 +54,15 @@ on:
         - xtensa-nxp_imx_adsp_zephyr-elf
         - xtensa-nxp_imx8m_adsp_zephyr-elf
         - xtensa-sample_controller_zephyr-elf
+      debug:
+        description: 'Debug'
+        type: choice
+        required: true
+        options:
+        - none
+        - toolchain-pre
+        - toolchain-post
+        - hosttools
 
 concurrency:
   group: ${{ github.event_name == 'workflow_dispatch' && github.run_id || github.head_ref || github.ref }}
@@ -63,7 +72,7 @@ env:
   BUG_URL: 'https://github.com/zephyrproject-rtos/sdk-ng/issues'
   BUNDLE_NAME: Zephyr SDK
   BUNDLE_PREFIX: zephyr-sdk
-  ZEPHYR_REF: main
+  ZEPHYR_REF: topic-sdk15
 
 jobs:
   # Setup
@@ -74,6 +83,7 @@ jobs:
       hosts: ${{ steps.generate-matrix.outputs.hosts }}
       targets: ${{ steps.generate-matrix.outputs.targets }}
       testenvs: ${{ steps.generate-matrix.outputs.testenvs }}
+      debug: ${{ steps.generate-matrix.outputs.debug }}
 
     steps:
     - name: Check out source code
@@ -116,6 +126,11 @@ jobs:
 
           # Build all targets for pull requests
           build_target_all="y"
+
+          # Set debug mode based on the pull request labels
+          ${{ contains(github.event.pull_request.labels.*.name, 'debug-toolchain-pre') }} && MATRIX_DEBUG="toolchain-pre"
+          ${{ contains(github.event.pull_request.labels.*.name, 'debug-toolchain-post') }} && MATRIX_DEBUG="toolchain-post"
+          ${{ contains(github.event.pull_request.labels.*.name, 'debug-hosttools') }} && MATRIX_DEBUG="hosttools"
         elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
           # Set configurations based on the user selection
           case '${{ github.event.inputs.host }}' in
@@ -148,6 +163,8 @@ jobs:
             xtensa-nxp_imx8m_adsp_zephyr-elf)     build_target_xtensa_nxp_imx8m_adsp_zephyr_elf="y";;
             xtensa-sample_controller_zephyr-elf)  build_target_xtensa_sample_controller_zephyr_elf="y";;
           esac
+
+          MATRIX_DEBUG="${{ github.event.inputs.debug }}"
         else
           # Build all for pushes and releases
           build_host_all="y"
@@ -164,8 +181,9 @@ jobs:
 
         if [ "${build_target_all}" == "y" ]; then
           build_target_aarch64_zephyr_elf="y"
-          build_target_arc64_zephyr_elf="y"
-          build_target_arc_zephyr_elf="y"
+          # FIXME: Re-enable ARC when the patches for the latest toolchains are available
+          # build_target_arc64_zephyr_elf="y"
+          # build_target_arc_zephyr_elf="y"
           build_target_arm_zephyr_eabi="y"
           build_target_mips_zephyr_elf="y"
           build_target_nios2_zephyr_elf="y"
@@ -314,6 +332,7 @@ jobs:
         echo "::set-output name=hosts::${MATRIX_HOSTS}"
         echo "::set-output name=targets::${MATRIX_TARGETS}"
         echo "::set-output name=testenvs::${MATRIX_TESTENVS}"
+        echo "::set-output name=debug::${MATRIX_DEBUG}"
 
         # Prepare configuration report
         CONFIG_REPORT=${RUNNER_TEMP}/config-report.txt
@@ -464,7 +483,7 @@ jobs:
 
         # Create case-sensitive workspace volume for macOS
         hdiutil create ${RUNNER_TEMP}/Workspace.sparseimage \
-                       -volname Workspace -type SPARSE -size 50g -fs HFSX
+                       -volname Workspace -type SPARSE -size 70g -fs HFSX
         hdiutil mount ${RUNNER_TEMP}/Workspace.sparseimage -mountpoint ${WORKSPACE}
 
         # Install required dependencies if running inside a GitHub-hosted runner
@@ -570,6 +589,12 @@ jobs:
 
         # Export environment variables
         echo "SRC_CACHE_URI=${SRC_CACHE_URI}" >> $GITHUB_ENV
+
+    - name: Setup debug session (pre)
+      if: always() && needs.setup.outputs.debug == 'toolchain-pre'
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: true
 
     - name: Build toolchain
       run: |
@@ -740,6 +765,12 @@ jobs:
         md5sum ${ARCHIVE_FILE} > md5.sum
         sha256sum ${ARCHIVE_FILE} > sha256.sum
 
+    - name: Setup debug session (post)
+      if: always() && needs.setup.outputs.debug == 'toolchain-post'
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: true
+
     - name: Sync downloaded source files to cache
       continue-on-error: true
       run: |
@@ -884,6 +915,12 @@ jobs:
         # Compute checksum
         md5sum ${ARCHIVE_FILE} > md5.sum
         sha256sum ${ARCHIVE_FILE} > sha256.sum
+
+    - name: Setup debug session
+      if: always() && needs.setup.outputs.debug == 'hosttools'
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: true
 
     - name: Sync downloaded source files to cache (Linux)
       if: startsWith(matrix.host.name, 'linux-')
@@ -1468,7 +1505,7 @@ jobs:
 
         # Run tests with twister
         TWISTER="${ZEPHYR_ROOT}/scripts/twister"
-        ${TWISTER} -v -N -M --inline-logs --retry-failed 3 \
+        ${TWISTER} -v -N -M --force-color --inline-logs --retry-failed 3 \
                    --subset ${{ matrix.subset }}/${{ env.SUBSET_COUNT }} \
                    ${HOST_ARGS} \
                    ${TEST_ARGS} \
