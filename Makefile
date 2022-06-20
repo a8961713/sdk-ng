@@ -9,7 +9,11 @@ all: pack
 build.done: toolchain.built hosttools.built cmake.built
 	touch $@
 
-toolchain.built:
+packages_installed: required_packages.txt
+	sudo apt-get install --no-install-recommends `cat required_packages.txt`
+	touch $@
+
+toolchain.built: packages_installed
 	git submodule update --init --force --depth=1 --recursive
 	./go.sh arm-zephyr-eabi
 	touch $@

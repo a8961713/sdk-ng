@@ -1,0 +1,15 @@
+git
+build-essential
+autoconf
+flex
+texinfo
+help2man
+gawk
+libtool-bin
+libncurses-dev
+bison
+python3-distutils
+libpython3.8-dev
+chrpath
+diffstat
+
