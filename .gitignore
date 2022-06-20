@@ -12,3 +12,4 @@ zephyr-sdk-x86_64-hosttools-standalone-*.sh
 poky/
 /*.built
 /build.done
+/packages_installed
