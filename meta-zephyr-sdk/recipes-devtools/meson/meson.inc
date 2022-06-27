@@ -11,11 +11,11 @@ SRC_URI = "https://github.com/mesonbuild/meson/releases/download/${PV}/meson-${P
            file://0001-gtkdoc-fix-issues-that-arise-when-cross-compiling.patch \
            file://0001-python-module-do-not-manipulate-the-environment-when.patch \
            file://disable-rpath-handling.patch \
-           file://0001-modules-python.py-do-not-substitute-python-s-install.patch \
            file://0001-Make-CPU-family-warnings-fatal.patch \
            file://0002-Support-building-allarch-recipes-again.patch \
+           file://0001-is_debianlike-always-return-False.patch \
            "
-SRC_URI[sha256sum] = "db586a451650d46bbe10984a87b79d9bcdc1caebf38d8e189f8848f8d502356d"
+SRC_URI[sha256sum] = "0a35cfd4cb779a6a415ad3ccbf2d4143334e96139125585ce49915bec494da02"
 
 UPSTREAM_CHECK_URI = "https://github.com/mesonbuild/meson/releases"
 UPSTREAM_CHECK_REGEX = "meson-(?P<pver>\d+(\.\d+)+)\.tar"
