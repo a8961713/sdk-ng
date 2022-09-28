@@ -1,5 +1,59 @@
 # Notes / Changes in various releases
 
+## Zephyr SDK 0.15.1-rc1
+
+- general:
+  * Updated the Zephyr SDK CMake package to declare Thread Local Storage (TLS)
+    support.
+
+- gcc:
+  * Changed RV64I multi-libs to use the `medany` code model.
+  * Changed the default RISC-V library to build with Zicsr and Zifencei
+    extensions.
+  * Added RISC-V `rv32ifac` multi-lib.
+  * Added ARC `hs4x_rel31` CPU variant support.
+  * Disabled GOT indirection usage for weak symbol references on AArch64.
+
+## Zephyr SDK 0.15.0
+
+- general:
+  * Added ARCv3 support to the toolchains.
+
+- binutils:
+  * Updated to Binutils 2.38 release.
+
+- gcc:
+  * Updated to GCC 12.1 release.
+  * Added multi-libs for the RISC-V base instruction sets (rv32i, rv32e, rv64i)
+    to increase the ISA extension configuration coverage.
+  * Added multi-libs for the RISC-V bit manipulation (Bitmanip) extensions.
+  * Fixed incorrect ARC enter pattern instruction offset.
+
+- gdb:
+  * Updated to GDB 12.1 release.
+  * Added separate GDB executable, gdb-py, supporting Python scripting and made
+    the default GDB executable, gdb, build without Python scripting support
+    such that it does not depend on a specific version of libpython.
+  * Removed Python incapable GDB executable, gdb-no-py, which is no longer
+    needed because it is equivalent to the default GDB executable.
+  * Disabled unneeded "mini debuginfo" support for the macOS GDB in order to
+    remove liblzma dependency.
+  * Added GDB build for ARC64 architecture.
+
+- newlib:
+  * Disabled C99 format specifier support for the newlib "nano" variant in
+    order to reduce its footprint. This feature will be kept disabled until
+    the picolibc gains wider adoption.
+  * Added ARCv3 support.
+
+- qemu:
+  * Updated to QEMU 7.0 release.
+  * Updated ARC QEMU to 2022.08.04 release.
+
+- openocd:
+  * Updated OpenOCD to the commit 480d4e17727864f75dc60e22cb1a42e022cb1db3 (the
+    latest version as of 11 June 2022).
+
 ## Zephyr SDK 0.14.2
 
 - general:

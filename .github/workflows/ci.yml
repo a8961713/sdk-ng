@@ -18,7 +18,7 @@ on:
       zephyr-ref:
         description: 'Zephyr Ref (branch, tag, SHA, ...)'
         required: true
-        default: topic-sdk15
+        default: main
       host:
         description: 'Host'
         type: choice
@@ -72,7 +72,7 @@ env:
   BUG_URL: 'https://github.com/zephyrproject-rtos/sdk-ng/issues'
   BUNDLE_NAME: Zephyr SDK
   BUNDLE_PREFIX: zephyr-sdk
-  ZEPHYR_REF: topic-sdk15
+  ZEPHYR_REF: main
 
 jobs:
   # Setup
@@ -181,9 +181,8 @@ jobs:
 
         if [ "${build_target_all}" == "y" ]; then
           build_target_aarch64_zephyr_elf="y"
-          # FIXME: Re-enable ARC when the patches for the latest toolchains are available
-          # build_target_arc64_zephyr_elf="y"
-          # build_target_arc_zephyr_elf="y"
+          build_target_arc64_zephyr_elf="y"
+          build_target_arc_zephyr_elf="y"
           build_target_arm_zephyr_eabi="y"
           build_target_mips_zephyr_elf="y"
           build_target_nios2_zephyr_elf="y"
@@ -212,7 +211,7 @@ jobs:
           MATRIX_HOSTS+='{
               "name": "linux-x86_64",
               "runner": "zephyr_runner",
-              "container": "ghcr.io/zephyrproject-rtos/sdk-build:v1.2.1",
+              "container": "ghcr.io/zephyrproject-rtos/sdk-build:v1.2.3",
               "archive": "tar.gz"
             },'
         fi
@@ -221,7 +220,7 @@ jobs:
           MATRIX_HOSTS+='{
               "name": "linux-aarch64",
               "runner": "zephyr_runner",
-              "container": "ghcr.io/zephyrproject-rtos/sdk-build:v1.2.1",
+              "container": "ghcr.io/zephyrproject-rtos/sdk-build:v1.2.3",
               "archive": "tar.gz"
             },'
         fi
@@ -248,7 +247,7 @@ jobs:
           MATRIX_HOSTS+='{
               "name": "windows-x86_64",
               "runner": "zephyr_runner",
-              "container": "ghcr.io/zephyrproject-rtos/sdk-build:v1.2.1",
+              "container": "ghcr.io/zephyrproject-rtos/sdk-build:v1.2.3",
               "archive": "zip"
             },'
         fi
@@ -490,7 +489,7 @@ jobs:
         # (self-hosted runners are expected to provide all required dependencies)
         if [[ "${{ matrix.host.runner }}" =~ ^macos.* ]]; then
           brew install autoconf automake bash binutils boost coreutils gawk \
-                       gnu-sed gnu-tar help2man ncurses pkg-config
+                       gnu-sed gnu-tar help2man meson ncurses ninja pkg-config
         fi
 
         # Install dependencies for cross compilation
@@ -817,6 +816,14 @@ jobs:
         host: ${{ fromJSON(needs.setup.outputs.hosts) }}
 
     steps:
+    - name: Apply container owner mismatch workaround
+      run: |
+        # FIXME: The owner UID of the GITHUB_WORKSPACE directory may not
+        #        match the container user UID because of the way GitHub
+        #        Actions runner is implemented. Remove this workaround when
+        #        GitHub comes up with a fundamental fix for this problem.
+        git config --global --add safe.directory '*'
+
     - name: Set up build environment (Linux)
       if: ${{ runner.os == 'Linux' }}
       run: |
@@ -1484,7 +1491,7 @@ jobs:
               # NOTE: no default user for this target is available
               ;;
             xtensa-intel_s1000_zephyr-elf)
-              PLATFORM_ARGS+="-p intel_s1000_crb "
+              PLATFORM_ARGS+="-p intel_adsp_cavs18 "
               ;;
             xtensa-nxp_imx_adsp_zephyr-elf)
               PLATFORM_ARGS+="-p nxp_adsp_imx8 "
