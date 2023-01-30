@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 
-POKY_KNOWN_COMMIT=${POKY_COMMIT:-"08665a81dcd41069eed1468f1587abe6b5893471"}
+POKY_KNOWN_COMMIT=${POKY_COMMIT:-"8daedc01101e686fc640c164004c0ec4e5f90b4e"}
 META_ZEPHYR_SDK_SOURCE=${SDK_SOURCE:-"meta-zephyr-sdk"}
 META_POKY_SOURCE=${POKY_SOURCE:-"poky"}
 META_ZEPHYR_SDK_SOURCE=$(readlink -f $META_ZEPHYR_SDK_SOURCE)
@@ -30,7 +30,7 @@ if [ ! -d $META_ZEPHYR_SDK_SOURCE ] ; then
 fi
 
 if [ ! -d $META_POKY_SOURCE ] ; then
-	git clone http://git.yoctoproject.org/git/poky
+	git clone https://github.com/zephyrproject-rtos/poky.git
 	META_POKY_SOURCE=$(readlink -f "poky")
 fi
 

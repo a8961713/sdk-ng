@@ -25,7 +25,7 @@ jobs:
   release:
     name: Release
     needs: [ ci ]
-    runs-on: zephyr_runner
+    runs-on: zephyr-runner-linux-x64-4xlarge
 
     steps:
     - name: Set up build environment
@@ -34,7 +34,7 @@ jobs:
         rm -rf ${GITHUB_WORKSPACE}/*
 
     - name: Download build artifacts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         path: artifacts
 

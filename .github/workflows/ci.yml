@@ -52,8 +52,6 @@ on:
         - xtensa-espressif_esp32_zephyr-elf
         - xtensa-espressif_esp32s2_zephyr-elf
         - xtensa-intel_apl_adsp_zephyr-elf
-        - xtensa-intel_bdw_adsp_zephyr-elf
-        - xtensa-intel_byt_adsp_zephyr-elf
         - xtensa-intel_s1000_zephyr-elf
         - xtensa-nxp_imx_adsp_zephyr-elf
         - xtensa-nxp_imx8m_adsp_zephyr-elf
@@ -92,14 +90,14 @@ jobs:
     steps:
     - name: Check out source code
       if: ${{ github.event_name != 'pull_request_target' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
         persist-credentials: false
 
     - name: Check out source code (pull request)
       if: ${{ github.event_name == 'pull_request_target' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.head.sha }}
         fetch-depth: 0
@@ -111,7 +109,7 @@ jobs:
         echo "${VERSION:1}" > version
 
     - name: Upload version file
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: version
         path: version
@@ -160,8 +158,6 @@ jobs:
             xtensa-espressif_esp32_zephyr-elf)    build_target_xtensa_espressif_esp32_zephyr_elf="y";;
             xtensa-espressif_esp32s2_zephyr-elf)  build_target_xtensa_espressif_esp32s2_zephyr_elf="y";;
             xtensa-intel_apl_adsp_zephyr-elf)     build_target_xtensa_intel_apl_adsp_zephyr_elf="y";;
-            xtensa-intel_bdw_adsp_zephyr-elf)     build_target_xtensa_intel_bdw_adsp_zephyr_elf="y";;
-            xtensa-intel_byt_adsp_zephyr-elf)     build_target_xtensa_intel_byt_adsp_zephyr_elf="y";;
             xtensa-intel_s1000_zephyr-elf)        build_target_xtensa_intel_s1000_zephyr_elf="y";;
             xtensa-nxp_imx_adsp_zephyr-elf)       build_target_xtensa_nxp_imx_adsp_zephyr_elf="y";;
             xtensa-nxp_imx8m_adsp_zephyr-elf)     build_target_xtensa_nxp_imx8m_adsp_zephyr_elf="y";;
@@ -196,8 +192,6 @@ jobs:
           build_target_xtensa_espressif_esp32_zephyr_elf="y"
           build_target_xtensa_espressif_esp32s2_zephyr_elf="y"
           build_target_xtensa_intel_apl_adsp_zephyr_elf="y"
-          build_target_xtensa_intel_bdw_adsp_zephyr_elf="y"
-          build_target_xtensa_intel_byt_adsp_zephyr_elf="y"
           build_target_xtensa_intel_s1000_zephyr_elf="y"
           build_target_xtensa_nxp_imx_adsp_zephyr_elf="y"
           build_target_xtensa_nxp_imx8m_adsp_zephyr_elf="y"
@@ -214,45 +208,45 @@ jobs:
         if [ "${build_host_linux_x86_64}" == "y" ]; then
           MATRIX_HOSTS+='{
               "name": "linux-x86_64",
-              "runner": "zephyr_runner",
+              "runner": "zephyr-runner-linux-x64-4xlarge",
               "container": "ghcr.io/zephyrproject-rtos/sdk-build:v1.2.3",
-              "archive": "tar.gz"
+              "archive": "tar.xz"
             },'
         fi
 
         if [ "${build_host_linux_aarch64}" == "y" ]; then
           MATRIX_HOSTS+='{
               "name": "linux-aarch64",
-              "runner": "zephyr_runner",
+              "runner": "zephyr-runner-linux-arm64-4xlarge",
               "container": "ghcr.io/zephyrproject-rtos/sdk-build:v1.2.3",
-              "archive": "tar.gz"
+              "archive": "tar.xz"
             },'
         fi
 
         if [ "${build_host_macos_x86_64}" == "y" ]; then
           MATRIX_HOSTS+='{
               "name": "macos-x86_64",
-              "runner": "zephyr_runner-macos-x86_64",
+              "runner": "zephyr-runner-macos-arm64-2xlarge",
               "container": "",
-              "archive": "tar.gz"
+              "archive": "tar.xz"
             },'
         fi
 
         if [ "${build_host_macos_aarch64}" == "y" ]; then
           MATRIX_HOSTS+='{
               "name": "macos-aarch64",
-              "runner": "zephyr_runner-macos-x86_64",
+              "runner": "zephyr-runner-macos-arm64-2xlarge",
               "container": "",
-              "archive": "tar.gz"
+              "archive": "tar.xz"
             },'
         fi
 
         if [ "${build_host_windows_x86_64}" == "y" ]; then
           MATRIX_HOSTS+='{
               "name": "windows-x86_64",
-              "runner": "zephyr_runner",
+              "runner": "zephyr-runner-linux-x64-4xlarge",
               "container": "ghcr.io/zephyrproject-rtos/sdk-build:v1.2.3",
-              "archive": "zip"
+              "archive": "7z"
             },'
         fi
 
@@ -272,8 +266,6 @@ jobs:
         [ "${build_target_xtensa_espressif_esp32_zephyr_elf}" == "y" ]    && MATRIX_TARGETS+='"xtensa-espressif_esp32_zephyr-elf",'
         [ "${build_target_xtensa_espressif_esp32s2_zephyr_elf}" == "y" ]  && MATRIX_TARGETS+='"xtensa-espressif_esp32s2_zephyr-elf",'
         [ "${build_target_xtensa_intel_apl_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-intel_apl_adsp_zephyr-elf",'
-        [ "${build_target_xtensa_intel_bdw_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-intel_bdw_adsp_zephyr-elf",'
-        [ "${build_target_xtensa_intel_byt_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-intel_byt_adsp_zephyr-elf",'
         [ "${build_target_xtensa_intel_s1000_zephyr_elf}" == "y" ]        && MATRIX_TARGETS+='"xtensa-intel_s1000_zephyr-elf",'
         [ "${build_target_xtensa_nxp_imx_adsp_zephyr_elf}" == "y" ]       && MATRIX_TARGETS+='"xtensa-nxp_imx_adsp_zephyr-elf",'
         [ "${build_target_xtensa_nxp_imx8m_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-nxp_imx8m_adsp_zephyr-elf",'
@@ -286,20 +278,40 @@ jobs:
         if [ "${build_host_linux_x86_64}" == "y" ]; then
           MATRIX_TESTENVS+='{
               "name": "ubuntu-20.04-x86_64",
-              "runner": "ubuntu-20.04",
-              "container": "",
+              "runner": "zephyr-runner-linux-x64-xlarge",
+              "container": "ghcr.io/zephyrproject-rtos/ci:master",
               "bundle-host": "linux-x86_64",
-              "bundle-archive": "tar.gz"
+              "bundle-archive": "tar.xz"
+            },'
+        fi
+
+        if [ "${build_host_linux_aarch64}" == "y" ]; then
+          MATRIX_TESTENVS+='{
+              "name": "ubuntu-20.04-aarch64",
+              "runner": "zephyr-runner-linux-arm64-xlarge",
+              "container": "ghcr.io/zephyrproject-rtos/ci:master",
+              "bundle-host": "linux-aarch64",
+              "bundle-archive": "tar.xz"
             },'
         fi
 
         if [ "${build_host_macos_x86_64}" == "y" ]; then
           MATRIX_TESTENVS+='{
               "name": "macos-11-x86_64",
-              "runner": "macos-11",
+              "runner": "zephyr-runner-macos-arm64-2xlarge",
               "container": "",
               "bundle-host": "macos-x86_64",
-              "bundle-archive": "tar.gz"
+              "bundle-archive": "tar.xz"
+            },'
+        fi
+
+        if [ "${build_host_macos_aarch64}" == "y" ]; then
+          MATRIX_TESTENVS+='{
+              "name": "macos-11-aarch64",
+              "runner": "zephyr-runner-macos-arm64-2xlarge",
+              "container": "",
+              "bundle-host": "macos-aarch64",
+              "bundle-archive": "tar.xz"
             },'
         fi
 
@@ -309,7 +321,7 @@ jobs:
               "runner": "windows-2019-8c",
               "container": "",
               "bundle-host": "windows-x86_64",
-              "bundle-archive": "zip"
+              "bundle-archive": "7z"
             },'
         fi
 
@@ -332,10 +344,10 @@ jobs:
         MATRIX_TESTENVS=$(echo "${MATRIX_TESTENVS}" | sed -zr 's/,([^,]*$)/\1/')
 
         # Output matrix variables
-        echo "::set-output name=hosts::${MATRIX_HOSTS}"
-        echo "::set-output name=targets::${MATRIX_TARGETS}"
-        echo "::set-output name=testenvs::${MATRIX_TESTENVS}"
-        echo "::set-output name=debug::${MATRIX_DEBUG}"
+        echo "hosts=${MATRIX_HOSTS}" >> $GITHUB_OUTPUT
+        echo "targets=${MATRIX_TARGETS}" >> $GITHUB_OUTPUT
+        echo "testenvs=${MATRIX_TESTENVS}" >> $GITHUB_OUTPUT
+        echo "debug=${MATRIX_DEBUG}" >> $GITHUB_OUTPUT
 
         # Prepare configuration report
         CONFIG_REPORT=${RUNNER_TEMP}/config-report.txt
@@ -413,15 +425,10 @@ jobs:
         sudo apt-get install -y autoconf automake bison flex gettext \
                                 help2man libboost-dev libboost-regex-dev \
                                 libncurses5-dev libtool-bin libtool-doc \
-                                pkg-config texinfo zip
+                                pkg-config texinfo p7zip
 
         # Install dependencies for cross compilation
-        if [ "${{ matrix.host.name }}" == "linux-aarch64" ]; then
-          # Install aarch64-linux-gnu cross toolchain
-          sudo apt-get install -y binutils-aarch64-linux-gnu \
-                                  gcc-aarch64-linux-gnu \
-                                  g++-aarch64-linux-gnu
-        elif [ "${{ matrix.host.name }}" == "windows-x86_64" ]; then
+        if [ "${{ matrix.host.name }}" == "windows-x86_64" ]; then
           # Install MinGW-w64 cross toolchain
           sudo apt-get install -y binutils-mingw-w64 gcc-mingw-w64 \
                                   g++-mingw-w64
@@ -497,10 +504,10 @@ jobs:
         fi
 
         # Install dependencies for cross compilation
-        if [ "${{ matrix.host.name }}" == "macos-aarch64" ]; then
-          # Clone x86-AArch64 crosskit
+        if [ "${{ matrix.host.name }}" == "macos-x86_64" ]; then
+          # Clone AArch64-x86 crosskit
           git clone \
-            https://github.com/stephanosio/crosskit-aarch64-apple-darwin.git \
+            https://github.com/stephanosio/crosskit-x86_64-apple-darwin.git \
             ${WORKSPACE}/crosskit
 
           # Make crosskit available in PATH
@@ -508,7 +515,7 @@ jobs:
         fi
 
         # Make Python 3.8 available in PATH
-        echo "/usr/local/opt/python@3.8/bin" >> $GITHUB_PATH
+        echo "${HOMEBREW_PREFIX}/opt/python@3.8/bin" >> $GITHUB_PATH
 
         # Set environment variables
         echo "TAR=gtar" >> $GITHUB_ENV
@@ -516,14 +523,14 @@ jobs:
 
     - name: Check out source code
       if: ${{ github.event_name != 'pull_request_target' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: recursive
         persist-credentials: false
 
     - name: Check out source code (pull request)
       if: ${{ github.event_name == 'pull_request_target' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.head.sha }}
         submodules: recursive
@@ -533,9 +540,9 @@ jobs:
       run: |
         # Configure macOS build environment
         if [ "$RUNNER_OS" == "macOS" ]; then
-          export PATH="$PATH:/usr/local/opt/binutils/bin"
-          export CPPFLAGS="-I/usr/local/opt/ncurses/include -I/usr/local/opt/gettext/include"
-          export LDFLAGS="-L/usr/local/opt/ncurses/lib -L/usr/local/opt/gettext/lib"
+          export PATH="$PATH:${HOMEBREW_PREFIX}/opt/binutils/bin"
+          export CPPFLAGS="-I${HOMEBREW_PREFIX}/opt/ncurses/include -I${HOMEBREW_PREFIX}/opt/gettext/include"
+          export LDFLAGS="-L${HOMEBREW_PREFIX}/opt/ncurses/lib -L${HOMEBREW_PREFIX}/opt/gettext/lib"
         fi
 
         # Create build directory
@@ -565,13 +572,13 @@ jobs:
         ${CT_NG} version
 
     - name: Download version information
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: version
         path: ${{ runner.temp }}
 
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v1-node16
       with:
         aws-access-key-id: ${{ secrets.AWS_CACHE_SDK_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_CACHE_SDK_SECRET_ACCESS_KEY }}
@@ -634,17 +641,11 @@ jobs:
         EOF
 
         # Set Canadian cross compilation configurations
-        if [ "${{ matrix.host.name }}" == "linux-aarch64" ]; then
-          # Building for linux-aarch64 on linux-x86_64
+        if [ "${{ matrix.host.name }}" == "macos-x86_64" ]; then
+          # Building for macos-x86_64 on macos-aarch64
           cat <<EOF >> .config
         CT_CANADIAN=y
-        CT_HOST="aarch64-linux-gnu"
-        EOF
-        elif [ "${{ matrix.host.name }}" == "macos-aarch64" ]; then
-          # Building for macos-aarch64 on macos-x86_64
-          cat <<EOF >> .config
-        CT_CANADIAN=y
-        CT_HOST="aarch64-apple-darwin"
+        CT_HOST="x86_64-apple-darwin"
         EOF
         elif [ "${{ matrix.host.name }}" == "windows-x86_64" ]; then
           # Building for windows-x86_64 on linux-x86_64
@@ -660,24 +661,13 @@ jobs:
         CT_GDB_CROSS_PYTHON_VARIANT=y
         EOF
 
-        if [ "${{ matrix.host.name }}" == "linux-aarch64" ]; then
-          # Clone crosskit-aarch64-linux-libpython cross compilation kit
+        if [ "${{ matrix.host.name }}" == "macos-x86_64" ]; then
+          # Clone crosskit-x86_64-darwin-libpython cross compilation kit
           git clone \
-            https://github.com/stephanosio/crosskit-aarch64-linux-libpython.git \
-            ${WORKSPACE}/crosskit-aarch64-linux-libpython
-          # Use Python 3.8.0
-          export LIBPYTHON_KIT_ROOT=${WORKSPACE}/crosskit-aarch64-linux-libpython/python-3.8.0
-          # Set Python configuration resolver for GDB
-          cat <<EOF >> .config
-        CT_GDB_CROSS_PYTHON_BINARY="${LIBPYTHON_KIT_ROOT}/bin/python"
-        EOF
-        elif [ "${{ matrix.host.name }}" == "macos-aarch64" ]; then
-          # Clone crosskit-aarch64-darwin-libpython cross compilation kit
-          git clone \
-            https://github.com/stephanosio/crosskit-aarch64-darwin-libpython.git \
-            ${WORKSPACE}/crosskit-aarch64-darwin-libpython
+            https://github.com/stephanosio/crosskit-x86_64-darwin-libpython.git \
+            ${WORKSPACE}/crosskit-x86_64-darwin-libpython
           # Use Python 3.8.12
-          export LIBPYTHON_KIT_ROOT=${WORKSPACE}/crosskit-aarch64-darwin-libpython/python-3.8.12
+          export LIBPYTHON_KIT_ROOT=${WORKSPACE}/crosskit-x86_64-darwin-libpython/python-3.8.12
           # Set Python configuration resolver for GDB
           cat <<EOF >> .config
         CT_GDB_CROSS_PYTHON_BINARY="${LIBPYTHON_KIT_ROOT}/bin/python"
@@ -720,12 +710,9 @@ jobs:
         popd
 
         # Resolve output directory path
-        if [ "${{ matrix.host.name }}" == "linux-aarch64" ]; then
+        if [ "${{ matrix.host.name }}" == "macos-x86_64" ]; then
           OUTPUT_BASE="${WORKSPACE}/output"
-          OUTPUT_DIR="HOST-aarch64-linux-gnu"
-        elif [ "${{ matrix.host.name }}" == "macos-aarch64" ]; then
-          OUTPUT_BASE="${WORKSPACE}/output"
-          OUTPUT_DIR="HOST-aarch64-apple-darwin"
+          OUTPUT_DIR="HOST-x86_64-apple-darwin"
         elif [ "${{ matrix.host.name }}" == "windows-x86_64" ]; then
           OUTPUT_BASE="${WORKSPACE}/output"
           OUTPUT_DIR="HOST-x86_64-w64-mingw32"
@@ -754,13 +741,13 @@ jobs:
         ARCHIVE_NAME=toolchain_${{ matrix.host.name }}_${{ matrix.target }}
         ARCHIVE_FILE=${ARCHIVE_NAME}.${{ matrix.host.archive }}
 
-        if [ "${{ matrix.host.archive }}" == "tar.gz" ]; then
-          ${TAR} -zcvf ${ARCHIVE_FILE} \
+        if [ "${{ matrix.host.archive }}" == "tar.xz" ]; then
+          XZ_OPT="-T0" \
+          ${TAR} -Jcvf ${ARCHIVE_FILE} \
                  --owner=0 --group=0 -C ${OUTPUT_BASE}/${OUTPUT_DIR} ${{ matrix.target }}
-        elif [ "${{ matrix.host.archive }}" == "zip" ]; then
+        elif [ "${{ matrix.host.archive }}" == "7z" ]; then
           pushd ${OUTPUT_BASE}/${OUTPUT_DIR}
-          zip -r ${GITHUB_WORKSPACE}/${ARCHIVE_FILE} \
-                 ${{ matrix.target }}
+          7z a -t7z -l ${GITHUB_WORKSPACE}/${ARCHIVE_FILE} ${{ matrix.target }}
           popd
         fi
 
@@ -789,13 +776,13 @@ jobs:
 
     - name: Upload toolchain build log
       if: always()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: log_${{ matrix.host.name }}_${{ matrix.target }}
         path: ${{ matrix.target }}.log
 
     - name: Upload toolchain build artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: toolchain_${{ matrix.host.name }}_${{ matrix.target }}
         path: |
@@ -852,21 +839,21 @@ jobs:
 
     - name: Check out source code
       if: ${{ github.event_name != 'pull_request_target' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: recursive
         persist-credentials: false
 
     - name: Check out source code (pull request)
       if: ${{ github.event_name == 'pull_request_target' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.head.sha }}
         submodules: recursive
         persist-credentials: false
 
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v1-node16
       with:
         aws-access-key-id: ${{ secrets.AWS_CACHE_SDK_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_CACHE_SDK_SECRET_ACCESS_KEY }}
@@ -903,12 +890,6 @@ jobs:
         # Patch Poky sanity configuration to allow building as root
         sed -i '/^INHERIT/ s/./#&/' poky/meta/conf/sanity.conf
 
-        # Resolve host machine type
-        if [ "${{ matrix.host.name }}" == "linux-aarch64" ]; then
-          # Cross compiling for AArch64 host on x86-64
-          export MACHINE="aarch64"
-        fi
-
         # Build meta-zephyr-sdk
         ${POKY_BASE}/scripts/meta-zephyr-sdk-build.sh tools
 
@@ -918,9 +899,10 @@ jobs:
         ARTIFACT=${ARTIFACT[0]}
         ARTIFACT=$(basename ${ARTIFACT})
         ARCHIVE_NAME=hosttools_${{ matrix.host.name }}
-        ARCHIVE_FILE=hosttools_${{ matrix.host.name }}.tar.gz
+        ARCHIVE_FILE=hosttools_${{ matrix.host.name }}.tar.xz
 
-        ${TAR} -zcvf ${ARCHIVE_FILE} --owner=0 --group=0 \
+        XZ_OPT="-T0" \
+        ${TAR} -Jcvf ${ARCHIVE_FILE} --owner=0 --group=0 \
                -C ${ARTIFACT_ROOT} ${ARTIFACT}
 
         # Compute checksum
@@ -945,7 +927,7 @@ jobs:
 
     - name: Upload toolchain build artifact
       if: startsWith(matrix.host.name, 'linux-') # FIXME: Do for all
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: hosttools_${{ matrix.host.name }}
         path: |
@@ -983,7 +965,7 @@ jobs:
 
         # Install common dependencies
         sudo apt-get update
-        sudo apt-get install -y zip
+        sudo apt-get install -y p7zip
 
         # Set environment variables
         echo "TAR=tar" >> $GITHUB_ENV
@@ -1007,13 +989,13 @@ jobs:
 
     - name: Check out source code
       if: ${{ github.event_name != 'pull_request_target' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         persist-credentials: false
 
     - name: Check out source code (pull request)
       if: ${{ github.event_name == 'pull_request_target' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.head.sha }}
         persist-credentials: false
@@ -1024,12 +1006,12 @@ jobs:
         ARCHIVE_NAME=cmake_${{ matrix.host.name }}
         ARCHIVE_FILE=${ARCHIVE_NAME}.${{ matrix.host.archive }}
 
-        if [ "${{ matrix.host.archive }}" == "tar.gz" ]; then
-          ${TAR} -zcvf ${ARCHIVE_FILE} --owner=0 --group=0 \
+        if [ "${{ matrix.host.archive }}" == "tar.xz" ]; then
+          XZ_OPT="-T0" \
+          ${TAR} -Jcvf ${ARCHIVE_FILE} --owner=0 --group=0 \
                  -C . cmake
-        elif [ "${{ matrix.host.archive }}" == "zip" ]; then
-          zip -r ${ARCHIVE_FILE} \
-                 cmake
+        elif [ "${{ matrix.host.archive }}" == "7z" ]; then
+          7z a -t7z -l ${ARCHIVE_FILE} cmake
         fi
 
         # Compute checksum
@@ -1037,7 +1019,7 @@ jobs:
         sha256sum ${ARCHIVE_FILE} > sha256.sum
 
     - name: Upload CMake package build artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: cmake_${{ matrix.host.name }}
         path: |
@@ -1072,7 +1054,7 @@ jobs:
 
         # Install common dependencies
         sudo apt-get update
-        sudo apt-get install -y jq zip
+        sudo apt-get install -y jq p7zip
 
         # Set environment variables
         echo "TAR=tar" >> $GITHUB_ENV
@@ -1096,21 +1078,21 @@ jobs:
 
     - name: Check out source code
       if: ${{ github.event_name != 'pull_request_target' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         path: repository
         persist-credentials: false
 
     - name: Check out source code (pull request)
       if: ${{ github.event_name == 'pull_request_target' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.head.sha }}
         path: repository
         persist-credentials: false
 
     - name: Download artifacts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         # NOTE: This downloads all build artifacts, including the toolchains and host tools for
         #       the irrelevant hosts, because the download-artifact action does not support
@@ -1130,10 +1112,10 @@ jobs:
 
         echo "BUNDLE_ARCHIVE_NAME=${ARCHIVE_NAME}" >> $GITHUB_ENV
 
-        if [ "${{ matrix.host.archive }}" == "tar.gz" ]; then
-          EXTRACT="${TAR} -zxvf"
-        elif [ "${{ matrix.host.archive }}" == "zip" ]; then
-          EXTRACT="unzip"
+        if [ "${{ matrix.host.archive }}" == "tar.xz" ]; then
+          EXTRACT="${TAR} -Jxvf"
+        elif [ "${{ matrix.host.archive }}" == "7z" ]; then
+          EXTRACT="7z x -o."
         fi
 
         # Create bundle directory
@@ -1182,11 +1164,12 @@ jobs:
         popd
 
         # Create minimal (without toolchains) distribution bundle archive
-        if [ "${{ matrix.host.archive }}" == "tar.gz" ]; then
-          ${TAR} -zcvf ${ARCHIVE_NAME}_minimal.${EXT} --owner=0 --group=0 \
+        if [ "${{ matrix.host.archive }}" == "tar.xz" ]; then
+          XZ_OPT="-T0" \
+          ${TAR} -Jcvf ${ARCHIVE_NAME}_minimal.${EXT} --owner=0 --group=0 \
                  -C . ${ARCHIVE_DIR}
-        elif [ "${{ matrix.host.archive }}" == "zip" ]; then
-          zip -r ${ARCHIVE_NAME}_minimal.${EXT} ${ARCHIVE_DIR}
+        elif [ "${{ matrix.host.archive }}" == "7z" ]; then
+          7z a -t7z -l ${ARCHIVE_NAME}_minimal.${EXT} ${ARCHIVE_DIR}
         fi
 
         # Stage toolchains
@@ -1211,11 +1194,12 @@ jobs:
         popd
 
         # Create full distribution bundle archive
-        if [ "${{ matrix.host.archive }}" == "tar.gz" ]; then
-          ${TAR} -zcvf ${ARCHIVE_NAME}.${EXT} --owner=0 --group=0 \
+        if [ "${{ matrix.host.archive }}" == "tar.xz" ]; then
+          XZ_OPT="-T0" \
+          ${TAR} -Jcvf ${ARCHIVE_NAME}.${EXT} --owner=0 --group=0 \
                  -C . ${ARCHIVE_DIR}
-        elif [ "${{ matrix.host.archive }}" == "zip" ]; then
-          zip -r ${ARCHIVE_NAME}.${EXT} ${ARCHIVE_DIR}
+        elif [ "${{ matrix.host.archive }}" == "7z" ]; then
+          7z a -t7z -l ${ARCHIVE_NAME}.${EXT} ${ARCHIVE_DIR}
         fi
 
         # Compute checksum
@@ -1223,7 +1207,7 @@ jobs:
         sha256sum ${ARCHIVE_NAME}.${EXT} ${ARCHIVE_NAME}_minimal.${EXT} > sha256.sum
 
     - name: Upload distribution bundle
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ env.BUNDLE_ARCHIVE_NAME }}
         path: |
@@ -1251,12 +1235,12 @@ jobs:
 
     env:
       SUBSET_COUNT: 2
-      PYTHON_DEPS: https://raw.githubusercontent.com/zephyrproject-rtos/zephyr/main/scripts/requirements.txt
       ZEPHYR_TOOLCHAIN_VARIANT: zephyr
 
     steps:
     - name: Set up Python
-      uses: actions/setup-python@v2
+      if: ${{ runner.os == 'Windows' }}
+      uses: actions/setup-python@v4
       with:
         # Force Python 3.10 because the twister is not compatible with a Python
         # version lower than 3.8 on Windows.
@@ -1272,18 +1256,7 @@ jobs:
 
         # Install required system packages
         sudo apt-get update
-        sudo apt-get install -y ccache device-tree-compiler dos2unix gperf \
-                                jq ninja-build wget
-
-        # Upgrade pip
-        python3 -m pip install --upgrade pip
-
-        # Install west
-        pip3 install --user --upgrade west
-        echo 'export PATH=~/.local/bin:"$PATH"' >> ~/.bashrc
-
-        # Install required Python packages
-        pip3 install --user --upgrade -r "${{ env.PYTHON_DEPS }}"
+        sudo apt-get install -y dos2unix jq
 
         # Set environment variables
         echo "TAR=tar" >> $GITHUB_ENV
@@ -1297,17 +1270,11 @@ jobs:
         rm -rf ${GITHUB_WORKSPACE}/*
         shopt -u dotglob
 
-        # Install required system packages
-        brew install ccache coreutils dos2unix dtc gperf jq ninja wget
-
-        # Upgrade pip
-        sudo python3 -m pip install --upgrade pip
-
-        # Install west
-        sudo pip3 install --upgrade west
-
-        # Install required Python packages
-        sudo pip3 install --upgrade -r "${{ env.PYTHON_DEPS }}"
+        # Install required dependencies if running inside a GitHub-hosted runner
+        # (self-hosted runners are expected to provide all required dependencies)
+        if [[ "${{ matrix.host.runner }}" =~ ^macos.* ]]; then
+          brew install ccache coreutils dos2unix dtc gperf jq ninja wget
+        fi
 
         # Set environment variables
         echo "TAR=gtar" >> $GITHUB_ENV
@@ -1322,16 +1289,7 @@ jobs:
         shopt -u dotglob
 
         # Install required system packages
-        choco install ccache dtc-msys2 gperf jq ninja wget unzip
-
-        # Upgrade pip
-        python3 -m pip install --upgrade pip
-
-        # Install west
-        pip3 install --upgrade west
-
-        # Install required Python packages
-        pip3 install --upgrade -r "${{ env.PYTHON_DEPS }}"
+        choco install ccache dtc-msys2 gperf jq ninja wget 7zip
 
         # Enable long paths support for Git
         git config --system core.longpaths true
@@ -1339,8 +1297,34 @@ jobs:
         # Set environment variables
         echo "ARTIFACT_ROOT=${GITHUB_WORKSPACE}/artifacts" >> $GITHUB_ENV
 
+    - name: Create Python virtual environment
+      if: ${{ runner.os != 'Linux' }}
+      run: |
+        # Create Python virtual environment
+        python3 -m venv ${GITHUB_WORKSPACE}/venv
+
+        # Resolve activation script path
+        if [ "${{ runner.os }}" == "Windows" ]; then
+          VENV_ACTIVATE="${GITHUB_WORKSPACE}/venv/Scripts/activate"
+        else
+          VENV_ACTIVATE="${GITHUB_WORKSPACE}/venv/bin/activate"
+        fi
+
+        # Test Python virtual environment
+        source ${VENV_ACTIVATE}
+        which python3
+        which pip3
+
+        # Install core components
+        python3 -m pip install --upgrade pip
+        pip3 install --upgrade setuptools wheel
+
+        # Set environment variables
+        echo "VENV=${GITHUB_WORKSPACE}/venv" >> $GITHUB_ENV
+        echo "VENV_ACTIVATE=${VENV_ACTIVATE}" >> $GITHUB_ENV
+
     - name: Download version information
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: version
         path: artifacts
@@ -1359,7 +1343,7 @@ jobs:
         echo "BUNDLE_DIR=${BUNDLE_DIR}" >> $GITHUB_ENV
 
     - name: Download distribution bundle
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: ${{ env.BUNDLE_NAME }}
         path: artifacts
@@ -1377,10 +1361,10 @@ jobs:
 
         # Extract distribution bundle archive
         BUNDLE_FILE=${BUNDLE_NAME}.${{ matrix.testenv.bundle-archive }}
-        if [ "${{ matrix.testenv.bundle-archive }}" == "tar.gz" ]; then
-          ${TAR} -zxvf ${ARTIFACT_ROOT}/${BUNDLE_FILE} -C tools
-        elif [ "${{ matrix.testenv.bundle-archive }}" == "zip" ]; then
-          unzip ${ARTIFACT_ROOT}/${BUNDLE_FILE} -d tools
+        if [ "${{ matrix.testenv.bundle-archive }}" == "tar.xz" ]; then
+          ${TAR} -Jxvf ${ARTIFACT_ROOT}/${BUNDLE_FILE} -C tools
+        elif [ "${{ matrix.testenv.bundle-archive }}" == "7z" ]; then
+          7z x -otools ${ARTIFACT_ROOT}/${BUNDLE_FILE}
         fi
 
         # Run setup script
@@ -1404,8 +1388,23 @@ jobs:
 
         popd
 
+    - name: Install west
+      run: |
+        # Activate Python virtual environment
+        if [ ! -z "${VENV_ACTIVATE}" ]; then
+          source ${VENV_ACTIVATE}
+        fi
+
+        # Install or upgrade west
+        pip3 install --upgrade west
+
     - name: Set up Zephyr repository
       run: |
+        # Activate Python virtual environment
+        if [ ! -z "${VENV_ACTIVATE}" ]; then
+          source ${VENV_ACTIVATE}
+        fi
+
         # Create Zephyr workspace
         ZEPHYR_WORKSPACE=${GITHUB_WORKSPACE}/zephyrproject
         west init ${ZEPHYR_WORKSPACE}
@@ -1431,8 +1430,25 @@ jobs:
         echo "ZEPHYR_WORKSPACE=${ZEPHYR_WORKSPACE}" >> $GITHUB_ENV
         echo "ZEPHYR_ROOT=${ZEPHYR_WORKSPACE}/zephyr" >> $GITHUB_ENV
 
+    - name: Install Python dependencies
+      run: |
+        # Activate Python virtual environment
+        if [ ! -z "${VENV_ACTIVATE}" ]; then
+          source ${VENV_ACTIVATE}
+
+          # Install Python dependencies from the checked out Zephyr repository
+          # if running inside a virtual environment; otherwise, it is assumed
+          # that the host already provides all the required dependencies.
+          pip3 install -r ${ZEPHYR_ROOT}/scripts/requirements.txt
+        fi
+
     - name: Run test suites
       run: |
+        # Activate Python virtual environment
+        if [ ! -z "${VENV_ACTIVATE}" ]; then
+          source ${VENV_ACTIVATE}
+        fi
+
         # Create working directory
         mkdir -p test
         cd test
@@ -1497,12 +1513,6 @@ jobs:
             xtensa-intel_apl_adsp_zephyr-elf)
               PLATFORM_ARGS+="-p intel_adsp_cavs15 "
               ;;
-            xtensa-intel_bdw_adsp_zephyr-elf)
-              # NOTE: no default user for this target is available
-              ;;
-            xtensa-intel_byt_adsp_zephyr-elf)
-              # NOTE: no default user for this target is available
-              ;;
             xtensa-intel_s1000_zephyr-elf)
               PLATFORM_ARGS+="-p intel_adsp_cavs18 "
               ;;
@@ -1534,7 +1544,7 @@ jobs:
 
     - name: Publish test results
       if: always()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: test_${{ matrix.testenv.name }}_${{ matrix.subset }}
         if-no-files-found: ignore
