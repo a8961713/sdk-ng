@@ -2,7 +2,7 @@ We added a Makefile that does all we need to build the ARM toolchain with stdc++
 
 type: make
 
-result is: ./scripts/zephyr-toolchain-arm-0.13.1-linux-x86_64-setup.run
+result is: ./scripts/zephyr-toolchain-arm-XXXXX-linux-x86_64-setup.run
 
 Debugging errors:
 
