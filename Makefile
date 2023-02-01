@@ -14,7 +14,7 @@ build.done: toolchain.built hosttools.built cmake.built
 verify_ubuntu_version:
 	./verify_ubuntu_version.sh
 	
-packages_installed: required_packages.txt verify_ubuntu_version
+packages_installed: required_packages.txt | verify_ubuntu_version
 	sudo apt-get install --no-install-recommends `cat required_packages.txt`
 	touch $@
 
