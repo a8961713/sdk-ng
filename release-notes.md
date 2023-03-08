@@ -121,7 +121,7 @@
     format specifier support up to that of the C89 standard.
 
 - qemu:
-  * Updated ARC QEMU to 2022.04.26 relesae.
+  * Updated ARC QEMU to 2022.04.26 release.
 
 - openocd:
   * Fixed Cyclone V SoC JTAG device order.
@@ -294,7 +294,7 @@
 ## Zephyr SDK 0.11.4
 - General:
   * Fixed issue with cmake files not being installed in arch specific
-    toolchan packages
+    toolchain packages
 
 - newlib:
   * Fix setting of -DMISSING_SYSCALL_NAMES consistent on all builds
