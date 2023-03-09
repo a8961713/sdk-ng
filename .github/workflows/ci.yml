@@ -624,8 +624,9 @@ jobs:
         pushd ${WORKSPACE}/build
 
         # Load default target configurations
-        cp ${GITHUB_WORKSPACE}/configs/${{ matrix.target }}.config \
-           .config
+        cat ${GITHUB_WORKSPACE}/configs/common.config \
+            ${GITHUB_WORKSPACE}/configs/${{ matrix.target }}.config \
+            > .config
 
         # Set version information
         cat <<EOF >> .config
@@ -637,7 +638,6 @@ jobs:
         # Set environment configuration
         cat <<EOF >> .config
         CT_LOCAL_TARBALLS_DIR="${WORKSPACE}/sources"
-        CT_LOCAL_PATCH_DIR="${GITHUB_WORKSPACE}/patches-arc64"
         CT_OVERLAY_LOCATION="${GITHUB_WORKSPACE}/overlays"
         EOF
 
