@@ -162,7 +162,7 @@ for t in ${TARGETS}; do
 	esac
 
 	${CT_NG} clean
-	cp ${GITDIR}/configs/${t}.config ${TARGET_BUILD_DIR}/defconfig
+	cat ${GITDIR}/configs/common.config ${GITDIR}/configs/${t}.config > ${TARGET_BUILD_DIR}/defconfig
 
 	# Disable python support in GDB on MacOS, this isn't currently working.
 	# It builds ok, but the resulting GDB segfaults.
