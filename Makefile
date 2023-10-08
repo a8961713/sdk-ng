@@ -1,5 +1,5 @@
 CMAKE_ARTIFACT = cmake.linux.x86_64.tar.bz2
-CROSS_TOOLCHAIN_ARTIFACT = arm-zephyr-eabi.linux.x86_64.tar.bz2
+CROSS_TOOLCHAIN_ARTIFACT = *-zephyr-*.linux.x86_64.tar.bz2
 HOSTTOOLS_ARTIFACT = zephyr-sdk-x86_64-hosttools*.sh
 
 .phony: all build.done copy_artifacts pack
@@ -20,7 +20,7 @@ packages_installed: required_packages.txt | verify_ubuntu_version
 
 toolchain.built: packages_installed
 	git submodule update --init --force --depth=1 --recursive
-	./go.sh arm-zephyr-eabi
+	./go.sh arm-zephyr-eabi riscv64-zephyr-elf
 	touch $@
 
 hosttools.built: toolchain.built

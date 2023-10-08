@@ -4,7 +4,8 @@ share/*
 build/*
 crosstool-ng/
 libexec/
-arm-zephyr-eabi.linux.x86_64.tar.bz2
+/arm-zephyr-eabi.linux.x86_64.tar.bz2
+/riscv64-zephyr-elf.linux.x86_64.tar.bz2
 cmake.linux.x86_64.tar.bz2
 scripts/toolchains/
 scripts/zephyr-*-linux-x86_64-setup.run

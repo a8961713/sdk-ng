@@ -156,6 +156,9 @@ for t in ${TARGETS}; do
 		arm-zephyr-eabi)
 			TRIPLET="arm-zephyr-eabi"
 			;;
+		riscv64-zephyr-elf)
+			TRIPLET="riscv64-zephyr-elf"
+			;;
 		*)
 			TRIPLET="${t}-zephyr-elf"
 			;;
@@ -179,6 +182,7 @@ for t in ${TARGETS}; do
 	if [ $? != 0 ]; then
 		exit 1
 	fi
+	chmod +w -R ${CT_PREFIX}
 	rm -rf ${CT_PREFIX}/*/newlib-nano
 
 	popd
