@@ -22,7 +22,7 @@ on:
       zephyr-ref:
         description: 'Zephyr Ref (branch, tag, SHA, ...)'
         required: true
-        default: main
+        default: topic-sdk-dev
       host:
         description: 'Host'
         type: choice
@@ -50,13 +50,16 @@ on:
         - riscv64-zephyr-elf
         - sparc-zephyr-elf
         - x86_64-zephyr-elf
+        - xtensa-dc233c_zephyr-elf
         - xtensa-espressif_esp32_zephyr-elf
         - xtensa-espressif_esp32s2_zephyr-elf
         - xtensa-espressif_esp32s3_zephyr-elf
-        - xtensa-intel_apl_adsp_zephyr-elf
-        - xtensa-intel_s1000_zephyr-elf
+        - xtensa-intel_ace15_mtpm_zephyr-elf
+        - xtensa-intel_tgl_adsp_zephyr-elf
+        - xtensa-mtk_mt8195_adsp_zephyr-elf
         - xtensa-nxp_imx_adsp_zephyr-elf
         - xtensa-nxp_imx8m_adsp_zephyr-elf
+        - xtensa-nxp_rt500_adsp_zephyr-elf
         - xtensa-sample_controller_zephyr-elf
       debug:
         description: 'Debug'
@@ -76,7 +79,7 @@ env:
   BUG_URL: 'https://github.com/zephyrproject-rtos/sdk-ng/issues'
   BUNDLE_NAME: Zephyr SDK
   BUNDLE_PREFIX: zephyr-sdk
-  ZEPHYR_REF: main
+  ZEPHYR_REF: topic-sdk-dev
 
 jobs:
   # Setup
@@ -158,13 +161,16 @@ jobs:
             riscv64-zephyr-elf)                   build_target_riscv64_zephyr_elf="y";;
             sparc-zephyr-elf)                     build_target_sparc_zephyr_elf="y";;
             x86_64-zephyr-elf)                    build_target_x86_64_zephyr_elf="y";;
+            xtensa-dc233c_zephyr-elf)             build_target_xtensa_dc233c_zephyr_elf="y";;
             xtensa-espressif_esp32_zephyr-elf)    build_target_xtensa_espressif_esp32_zephyr_elf="y";;
             xtensa-espressif_esp32s2_zephyr-elf)  build_target_xtensa_espressif_esp32s2_zephyr_elf="y";;
             xtensa-espressif_esp32s3_zephyr-elf)  build_target_xtensa_espressif_esp32s3_zephyr_elf="y";;
-            xtensa-intel_apl_adsp_zephyr-elf)     build_target_xtensa_intel_apl_adsp_zephyr_elf="y";;
-            xtensa-intel_s1000_zephyr-elf)        build_target_xtensa_intel_s1000_zephyr_elf="y";;
+            xtensa-intel_ace15_mtpm_zephyr-elf)   build_target_xtensa_intel_ace15_mtpm_zephyr_elf="y";;
+            xtensa-intel_tgl_adsp_zephyr-elf)     build_target_xtensa_intel_tgl_adsp_zephyr_elf="y";;
+            xtensa-mtk_mt8195_adsp_zephyr-elf)    build_target_xtensa_mtk_mt8195_adsp_zephyr_elf="y";;
             xtensa-nxp_imx_adsp_zephyr-elf)       build_target_xtensa_nxp_imx_adsp_zephyr_elf="y";;
             xtensa-nxp_imx8m_adsp_zephyr-elf)     build_target_xtensa_nxp_imx8m_adsp_zephyr_elf="y";;
+            xtensa-nxp_rt500_adsp_zephyr-elf)     build_target_xtensa_nxp_rt500_adsp_zephyr_elf="y";;
             xtensa-sample_controller_zephyr-elf)  build_target_xtensa_sample_controller_zephyr_elf="y";;
           esac
 
@@ -194,13 +200,16 @@ jobs:
           build_target_riscv64_zephyr_elf="y"
           build_target_sparc_zephyr_elf="y"
           build_target_x86_64_zephyr_elf="y"
+          build_target_xtensa_dc233c_zephyr_elf="y"
           build_target_xtensa_espressif_esp32_zephyr_elf="y"
           build_target_xtensa_espressif_esp32s2_zephyr_elf="y"
           build_target_xtensa_espressif_esp32s3_zephyr_elf="y"
-          build_target_xtensa_intel_apl_adsp_zephyr_elf="y"
-          build_target_xtensa_intel_s1000_zephyr_elf="y"
+          build_target_xtensa_intel_ace15_mtpm_zephyr_elf="y"
+          build_target_xtensa_intel_tgl_adsp_zephyr_elf="y"
+          build_target_xtensa_mtk_mt8195_adsp_zephyr_elf="y"
           build_target_xtensa_nxp_imx_adsp_zephyr_elf="y"
           build_target_xtensa_nxp_imx8m_adsp_zephyr_elf="y"
+          build_target_xtensa_nxp_rt500_adsp_zephyr_elf="y"
           build_target_xtensa_sample_controller_zephyr_elf="y"
         fi
 
@@ -270,13 +279,16 @@ jobs:
         [ "${build_target_riscv64_zephyr_elf}" == "y" ]                   && MATRIX_TARGETS+='"riscv64-zephyr-elf",'
         [ "${build_target_sparc_zephyr_elf}" == "y" ]                     && MATRIX_TARGETS+='"sparc-zephyr-elf",'
         [ "${build_target_x86_64_zephyr_elf}" == "y" ]                    && MATRIX_TARGETS+='"x86_64-zephyr-elf",'
+        [ "${build_target_xtensa_dc233c_zephyr_elf}" == "y" ]             && MATRIX_TARGETS+='"xtensa-dc233c_zephyr-elf",'
         [ "${build_target_xtensa_espressif_esp32_zephyr_elf}" == "y" ]    && MATRIX_TARGETS+='"xtensa-espressif_esp32_zephyr-elf",'
         [ "${build_target_xtensa_espressif_esp32s2_zephyr_elf}" == "y" ]  && MATRIX_TARGETS+='"xtensa-espressif_esp32s2_zephyr-elf",'
         [ "${build_target_xtensa_espressif_esp32s3_zephyr_elf}" == "y" ]  && MATRIX_TARGETS+='"xtensa-espressif_esp32s3_zephyr-elf",'
-        [ "${build_target_xtensa_intel_apl_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-intel_apl_adsp_zephyr-elf",'
-        [ "${build_target_xtensa_intel_s1000_zephyr_elf}" == "y" ]        && MATRIX_TARGETS+='"xtensa-intel_s1000_zephyr-elf",'
+        [ "${build_target_xtensa_intel_ace15_mtpm_zephyr_elf}" == "y" ]   && MATRIX_TARGETS+='"xtensa-intel_ace15_mtpm_zephyr-elf",'
+        [ "${build_target_xtensa_intel_tgl_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-intel_tgl_adsp_zephyr-elf",'
+        [ "${build_target_xtensa_mtk_mt8195_adsp_zephyr_elf}" == "y" ]    && MATRIX_TARGETS+='"xtensa-mtk_mt8195_adsp_zephyr-elf",'
         [ "${build_target_xtensa_nxp_imx_adsp_zephyr_elf}" == "y" ]       && MATRIX_TARGETS+='"xtensa-nxp_imx_adsp_zephyr-elf",'
         [ "${build_target_xtensa_nxp_imx8m_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-nxp_imx8m_adsp_zephyr-elf",'
+        [ "${build_target_xtensa_nxp_rt500_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-nxp_rt500_adsp_zephyr-elf",'
         [ "${build_target_xtensa_sample_controller_zephyr_elf}" == "y" ]  && MATRIX_TARGETS+='"xtensa-sample_controller_zephyr-elf",'
         MATRIX_TARGETS+=']'
 
@@ -286,7 +298,7 @@ jobs:
         if [ "${build_host_linux_x86_64}" == "y" ]; then
           MATRIX_TESTENVS+='{
               "name": "ubuntu-20.04-x86_64",
-              "runner": "zephyr-runner-linux-x64-xlarge",
+              "runner": "zephyr-runner-linux-x64-4xlarge",
               "container": "ghcr.io/zephyrproject-rtos/ci:master",
               "bundle-host": "linux-x86_64",
               "bundle-archive": "tar.xz"
@@ -296,7 +308,7 @@ jobs:
         if [ "${build_host_linux_aarch64}" == "y" ]; then
           MATRIX_TESTENVS+='{
               "name": "ubuntu-20.04-aarch64",
-              "runner": "zephyr-runner-linux-arm64-xlarge",
+              "runner": "zephyr-runner-linux-arm64-4xlarge",
               "container": "ghcr.io/zephyrproject-rtos/ci:master",
               "bundle-host": "linux-aarch64",
               "bundle-archive": "tar.xz"
@@ -1516,21 +1528,23 @@ jobs:
               PLATFORM_ARGS+="-p qemu_x86 "
               PLATFORM_ARGS+="-p qemu_x86_64 "
               ;;
+            xtensa-dc233c_zephyr-elf)
+              PLATFORM_ARGS+="-p qemu_xtensa_dc233c "
+              ;;
             xtensa-espressif_esp32_zephyr-elf)
-              PLATFORM_ARGS+="-p esp32 "
+              PLATFORM_ARGS+="-p esp32_devkitc_wroom "
               ;;
             xtensa-espressif_esp32s2_zephyr-elf)
               PLATFORM_ARGS+="-p esp32s2_saola "
               ;;
             xtensa-espressif_esp32s3_zephyr-elf)
-              # FIXME: Disabled until esp32s3_devkitc board is upstreamed.
-              # PLATFORM_ARGS+="-p esp32s3_devkitc "
+              PLATFORM_ARGS+="-p esp32s3_devkitm "
               ;;
-            xtensa-intel_apl_adsp_zephyr-elf)
-              PLATFORM_ARGS+="-p intel_adsp_cavs15 "
+            xtensa-intel_ace15_mtpm_zephyr-elf)
+              PLATFORM_ARGS+="-p intel_adsp_ace15_mtpm "
               ;;
-            xtensa-intel_s1000_zephyr-elf)
-              PLATFORM_ARGS+="-p intel_adsp_cavs18 "
+            xtensa-intel_tgl_adsp_zephyr-elf)
+              PLATFORM_ARGS+="-p intel_adsp_cavs25 "
               ;;
             xtensa-nxp_imx_adsp_zephyr-elf)
               PLATFORM_ARGS+="-p nxp_adsp_imx8 "
@@ -1553,6 +1567,7 @@ jobs:
         # Run tests with twister
         TWISTER="${ZEPHYR_ROOT}/scripts/twister"
         ${TWISTER} -v -N -M --force-color --inline-logs --retry-failed 3 \
+                   --force-toolchain \
                    --subset ${{ matrix.subset }}/${{ env.SUBSET_COUNT }} \
                    ${HOST_ARGS} \
                    ${TEST_ARGS} \

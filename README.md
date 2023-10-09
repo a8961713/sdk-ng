@@ -12,10 +12,11 @@ The toolchains for the following target architectures are supported:
 - MIPS (32-bit and 64-bit)
 - Nios II
 - RISC-V (32-bit and 64-bit; RV32I, RV32E, RV64I)
+- SPARC (32-bit and 64-bit; SPARC V8, SPARC V9)
 - x86 (32-bit and 64-bit)
-- Xtensa (sample_controller, intel_apl_adsp, intel_s1000,
-  nxp_imx_adsp, nxp_imx8m_adsp, espressif_esp32, espressif_esp32s2,
-  espressif_esp32s3)
+- Xtensa (sample_controller, intel_ace15_mtpm, intel_tgl_adsp,
+  nxp_imx_adsp, nxp_imx8m_adsp, nxp_rt500_adsp, espressif_esp32, espressif_esp32s2,
+  espressif_esp32s3, mt8195_adsp)
 
 The following host tools are available as part of the Zephyr SDK:
 
@@ -32,9 +33,12 @@ The Zephyr SDK bundle releases are available for the following host platforms:
 - macOS (AArch64, x86-64)
 - Windows (x86-64)
 
-These binaries can be downloaded from here:
+These binaries can be downloaded from
+[here](https://github.com/zephyrproject-rtos/sdk-ng/tags).
 
-https://github.com/zephyrproject-rtos/sdk-ng/releases
+For future release plans, please refer to the
+[Release Plan](https://github.com/zephyrproject-rtos/sdk-ng/wiki/Release-Plan)
+document in the wiki.
 
 ## Build Process
 
@@ -77,3 +81,30 @@ To create a new Zephyr SDK release:
   the tag name should be `v0.11.0`) and add the release information.
 - Once the release is published, CI will build the Zephyr SDK bundles for all
   supported host platforms and will upload the binaries to the release page.
+
+For more detailed information on the release process, please refer to the
+[Release Process](https://github.com/zephyrproject-rtos/sdk-ng/wiki/Release-Process)
+document in the wiki.
+
+## Submodule Update Process
+
+The Zephyr SDK repository contains various submodules, such as `binutils` and
+`gcc`, required for building the Zephyr SDK.
+
+When updating a submodule, the following procedure should be followed:
+
+- Push a topic branch to the submodule repository.
+- Create a pull request from the topic branch to the default (current) branch
+  of the submodule repository.
+- Create a pull request in the Zephyr SDK repository to update the submodule
+  reference to the tip of the topic (pull request) branch.
+- When the pull request in the Zephyr SDK repository passes the CI and the
+  submodule pull request is sufficiently reviewed, merge the submodule pull
+  request.
+- Update the pull request in the Zephyr SDK repository to reference the merged
+  commit in the submodule repository.
+- Merge the pull request in the Zephyr SDK repository.
+
+When updating the `picolibc` submodule, the `picolibc` module in the `west.yml`
+of the [main Zephyr repository](https://github.com/zephyrproject-rtos/zephyr)
+must also be updated to reference the same commit.
