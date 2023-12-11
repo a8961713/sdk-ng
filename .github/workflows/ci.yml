@@ -22,7 +22,7 @@ on:
       zephyr-ref:
         description: 'Zephyr Ref (branch, tag, SHA, ...)'
         required: true
-        default: topic-sdk-dev
+        default: collab-sdk-dev
       host:
         description: 'Host'
         type: choice
@@ -59,7 +59,9 @@ on:
         - xtensa-mtk_mt8195_adsp_zephyr-elf
         - xtensa-nxp_imx_adsp_zephyr-elf
         - xtensa-nxp_imx8m_adsp_zephyr-elf
+        - xtensa-nxp_imx8ulp_adsp_zephyr-elf
         - xtensa-nxp_rt500_adsp_zephyr-elf
+        - xtensa-nxp_rt600_adsp_zephyr-elf
         - xtensa-sample_controller_zephyr-elf
       debug:
         description: 'Debug'
@@ -79,7 +81,7 @@ env:
   BUG_URL: 'https://github.com/zephyrproject-rtos/sdk-ng/issues'
   BUNDLE_NAME: Zephyr SDK
   BUNDLE_PREFIX: zephyr-sdk
-  ZEPHYR_REF: topic-sdk-dev
+  ZEPHYR_REF: collab-sdk-dev
 
 jobs:
   # Setup
@@ -170,7 +172,9 @@ jobs:
             xtensa-mtk_mt8195_adsp_zephyr-elf)    build_target_xtensa_mtk_mt8195_adsp_zephyr_elf="y";;
             xtensa-nxp_imx_adsp_zephyr-elf)       build_target_xtensa_nxp_imx_adsp_zephyr_elf="y";;
             xtensa-nxp_imx8m_adsp_zephyr-elf)     build_target_xtensa_nxp_imx8m_adsp_zephyr_elf="y";;
+            xtensa-nxp_imx8ulp_adsp_zephyr-elf)   build_target_xtensa_nxp_imx8ulp_adsp_zephyr_elf="y";;
             xtensa-nxp_rt500_adsp_zephyr-elf)     build_target_xtensa_nxp_rt500_adsp_zephyr_elf="y";;
+            xtensa-nxp_rt600_adsp_zephyr-elf)     build_target_xtensa_nxp_rt600_adsp_zephyr_elf="y";;
             xtensa-sample_controller_zephyr-elf)  build_target_xtensa_sample_controller_zephyr_elf="y";;
           esac
 
@@ -209,7 +213,9 @@ jobs:
           build_target_xtensa_mtk_mt8195_adsp_zephyr_elf="y"
           build_target_xtensa_nxp_imx_adsp_zephyr_elf="y"
           build_target_xtensa_nxp_imx8m_adsp_zephyr_elf="y"
+          build_target_xtensa_nxp_imx8ulp_adsp_zephyr_elf="y"
           build_target_xtensa_nxp_rt500_adsp_zephyr_elf="y"
+          build_target_xtensa_nxp_rt600_adsp_zephyr_elf="y"
           build_target_xtensa_sample_controller_zephyr_elf="y"
         fi
 
@@ -288,7 +294,9 @@ jobs:
         [ "${build_target_xtensa_mtk_mt8195_adsp_zephyr_elf}" == "y" ]    && MATRIX_TARGETS+='"xtensa-mtk_mt8195_adsp_zephyr-elf",'
         [ "${build_target_xtensa_nxp_imx_adsp_zephyr_elf}" == "y" ]       && MATRIX_TARGETS+='"xtensa-nxp_imx_adsp_zephyr-elf",'
         [ "${build_target_xtensa_nxp_imx8m_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-nxp_imx8m_adsp_zephyr-elf",'
+        [ "${build_target_xtensa_nxp_imx8ulp_adsp_zephyr_elf}" == "y" ]   && MATRIX_TARGETS+='"xtensa-nxp_imx8ulp_adsp_zephyr-elf",'
         [ "${build_target_xtensa_nxp_rt500_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-nxp_rt500_adsp_zephyr-elf",'
+        [ "${build_target_xtensa_nxp_rt600_adsp_zephyr_elf}" == "y" ]     && MATRIX_TARGETS+='"xtensa-nxp_rt600_adsp_zephyr-elf",'
         [ "${build_target_xtensa_sample_controller_zephyr_elf}" == "y" ]  && MATRIX_TARGETS+='"xtensa-sample_controller_zephyr-elf",'
         MATRIX_TARGETS+=']'
 
@@ -1529,7 +1537,7 @@ jobs:
               PLATFORM_ARGS+="-p qemu_x86_64 "
               ;;
             xtensa-dc233c_zephyr-elf)
-              PLATFORM_ARGS+="-p qemu_xtensa_dc233c "
+              PLATFORM_ARGS+="-p qemu_xtensa_mmu "
               ;;
             xtensa-espressif_esp32_zephyr-elf)
               PLATFORM_ARGS+="-p esp32_devkitc_wroom "
@@ -1551,6 +1559,12 @@ jobs:
               ;;
             xtensa-nxp_imx8m_adsp_zephyr-elf)
               PLATFORM_ARGS+="-p nxp_adsp_imx8m "
+              ;;
+            xtensa-nxp_imx8ulp_adsp_zephyr-elf)
+              # FIXME: Disabled because nxp_adsp_imx8ulp support has not been
+              #        merged yet. Enable when zephyrproject-rtos/zephyr#63751
+              #        is merged.
+              #PLATFORM_ARGS+="-p nxp_adsp_imx8ulp "
               ;;
             xtensa-sample_controller_zephyr-elf)
               PLATFORM_ARGS+="-p qemu_xtensa "
