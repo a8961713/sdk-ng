@@ -159,6 +159,10 @@ for t in ${TARGETS}; do
 		riscv64-zephyr-elf)
 			TRIPLET="riscv64-zephyr-elf"
 			;;
+		xtensa-espressif_esp32s3_zephyr-elf)
+			cp -a ${GITDIR}/overlays ${TARGET_BUILD_DIR}
+			TRIPLET="xtensa-espressif_esp32s3_zephyr-elf"
+			;;
 		*)
 			TRIPLET="${t}-zephyr-elf"
 			;;

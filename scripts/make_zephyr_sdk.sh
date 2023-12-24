@@ -23,7 +23,7 @@ sdk_version=$(cat $root_dir/VERSION)
 os=$1
 machine=$2
 
-arch_list="arm arm64 arc arc64 nios2 riscv64 sparc mips x86_64 xtensa_sample_controller \
+arch_list="arm arm64 arc arc64 nios2 riscv64 sparc mips x86_64 xtensa_espressif_esp32s3 xtensa_sample_controller \
            xtensa_intel_apl_adsp xtensa_intel_s1000 xtensa_intel_bdw_adsp \
 	   xtensa_intel_byt_adsp xtensa_nxp_imx_adsp xtensa_nxp_imx8m_adsp"
 
@@ -211,6 +211,7 @@ parse_toolchain_name file_gcc_xtensa_intel_byt_adsp xtensa_intel_byt_adsp
 parse_toolchain_name file_gcc_xtensa_nxp_imx_adsp xtensa_nxp_imx_adsp
 parse_toolchain_name file_gcc_xtensa_nxp_imx8m_adsp xtensa_nxp_imx8m_adsp
 parse_toolchain_name file_gcc_xtensa_intel_s1000 xtensa_intel_s1000
+parse_toolchain_name file_gcc_xtensa_espressif_esp32s3 xtensa-espressif_esp32s3
 parse_toolchain_name file_hosttools hosttools
 parse_toolchain_name file_cmake cmake
 
