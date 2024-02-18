@@ -13,4 +13,4 @@ libpython3.8-dev
 chrpath
 diffstat
 makeself
-
+meson
